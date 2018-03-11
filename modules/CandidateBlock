@@ -1,0 +1,11 @@
+class CandidateBlock {
+    constructor(blockIndex, transactionsIncluded, expectedReward, difficulty, blockDataHash){
+        this.blockIndex = blockIndex; // string
+        this.transactionsIncluded  = Number(transactionsIncluded); // number
+        this.expectedReward  = Number(expectedReward); // number
+        this.difficulty = Number(difficulty); // number
+        this.blockDataHash = blockDataHash; // hex string
+    }
+}
+
+module.exports = CandidateBlock;
