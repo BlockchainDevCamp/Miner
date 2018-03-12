@@ -10,7 +10,9 @@ class Miner {
         this.nodeUrl    = nodeUrl; // node url ending with '/'
     }
 
-    mine () {
+    mine(nodeUrl, minerAddress) {
+
+        console.log('--Miner Started--');
 
         while(true){
             let candidateBlock;
@@ -27,11 +29,14 @@ class Miner {
                 },
                 json: true
             }
-
+            console.log('-- Request Options (GET BLOCK) --');
+            console.log(requestOptions);
+            console.log('---------------------');
             get.concat(requestOptions, function (err, res, data) {
                 if (err) return err
 
                 if(res.statusCode == 200){
+                    console.log("Response Recieved- 200 OK");
 
                     candidateBlock = new CandidateBlock(
                             data.index,
@@ -41,27 +46,30 @@ class Miner {
                             data.blockDataHash
                     );
 
-
+                    console.log('-- Response Payload --');
+                    console.log(candidateBlock);
+                    console.log('---------------------');
                     var date ;
                     var hashPreffix = '0'.repeat(candidateBlock.difficulty);
                     var hash;
+                    var hashData;
+                    var count=0;
                     var hashFound=false;
-                    console.log(hashPreffix);
 
                     // loop for finding the block hash according to diffiulty
                     while (!hashFound){
                         date   = new Date().toISOString();
                         nonce  = Crypto.random4BytesInt();
-                       /* console.log("nonce ---> "+nonce);
-                        console.log("date ---> "+date);
-                        console.log("blockDataHash ---> "+candidateBlock.blockDataHash);*/
 
-                        hash = Crypto.generateSHA256(candidateBlock.blockDataHash+nonce+date);
-                        /*console.log("hash ---> "+ hash);
-                        console.log("hashPreffix ---> "+ hashPreffix);*/
+                        hashData = candidateBlock.blockDataHash + "|" + nonce + "|" + date;
+
+                        hash = Crypto.getSHA256(hashData);
+                        count++;
+                        console.log(hashData +  "-->" + hash);
                         hashFound = hash.startsWith(hashPreffix);
                     }
-                    submitBlock(candidateBlock,nonce,hash,date);
+                    console.log(candidateBlock.blockDataHash + "|" + nonce + "|" + date + "--> " + hash);
+                    submitBlock(candidateBlock,nonce,hash,date,nodeUrl,minerAddress);
                 }
 
             })
@@ -73,22 +81,27 @@ class Miner {
 
 }
 
-function submitBlock(blockData, nonce, hash, date) {
+function submitBlock(blockData, nonce, hash, date,nodeUrl,minerAddress) {
     const requestOptions = {
         method: 'POST',
-        url: this.nodeUrl+"mine/submit",
+        url: nodeUrl+"mine/submit",
         body: {
             index: blockData.index,
             nonce: nonce,
             dateCreated: date,
             blockHashMiner: hash,
-            minerAddress: this.address
+            blockDataHash: blockData.blockDataHash,
+            minerAddress: minerAddress
         },
         json: true
     }
 
+    console.log('-- Request Options (SUBMIT BLOCK) --');
+    console.log(requestOptions);
+    console.log('---------------------');
+
     get.concat(requestOptions, function (err, res, data) {
-        if (err) throw err
+        if (err) return err
         console.log(res.statusCode) // `data` is an object
     })
 }

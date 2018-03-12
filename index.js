@@ -22,7 +22,8 @@ let nodeUrl = "http://127.0.0.1:5555/"
 /**/
 
 let miner = new Miner(about, minerName,minerAddress,nodeUrl);
-miner.mine();
+
+miner.mine(miner.nodeUrl,miner.address);
 
 //TODO add miner object and miner.mine
 

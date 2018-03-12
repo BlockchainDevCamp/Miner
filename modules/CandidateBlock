@@ -1,6 +1,6 @@
 class CandidateBlock {
-    constructor(blockIndex, transactionsIncluded, expectedReward, difficulty, blockDataHash){
-        this.blockIndex = blockIndex; // string
+    constructor(index, transactionsIncluded, expectedReward, difficulty, blockDataHash){
+        this.index = index; // string
         this.transactionsIncluded  = Number(transactionsIncluded); // number
         this.expectedReward  = Number(expectedReward); // number
         this.difficulty = Number(difficulty); // number
