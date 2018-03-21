@@ -94,15 +94,6 @@ class Crypto {
         let publicKey = Crypto.derivePublicKeyFromCompressedPublicKey(compressedPublicKey);
         return publicKey.verify(payloadHash, existingSignature);
     }
-/*
-    static random4BytesInt() {
-        return randomBytes(4, function (err, resp) {
-            if (err) throw err;
-            var hex = resp.toString('hex');
-            var myInt32 = parseInt(hex, 16);
-           return myInt32;
-        });
-    }*/
 
     static random4BytesInt() {
         return crypto.randomBytes(4).readUInt32BE(0, true);

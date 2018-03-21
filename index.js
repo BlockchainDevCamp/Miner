@@ -9,7 +9,7 @@ const Miner = require('./modules/Miner');
 let about = "NodeJs miner";
 let minerName = "Simeon";
 let minerAddress = "2da8959012043f9d9c6591af22a3d30af986bc2f";
-let nodeUrl = "http://127.0.0.1:5555/"
+let nodeUrl = "http://127.0.0.1:1111/"
 /**/
 
 let miner = new Miner(about, minerName,minerAddress,nodeUrl);
