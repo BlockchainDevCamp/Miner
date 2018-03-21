@@ -1,6 +1,8 @@
-const get               = require('simple-get');
+// const get               = require('simple-get');
+const Request = require('request');
 const CandidateBlock    = require('./CandidateBlock');
 const Crypto            = require('./Crypto');
+
 
 class Miner {
     constructor(about, name, address, nodeUrl){
@@ -14,27 +16,35 @@ class Miner {
 
         console.log('--Miner Started--');
 
-        while(true){
+        // while(true){
             console.log('--STARTING MINNING PROCEDURE--');
             let candidateBlock;
             let nonce;
             const requestOptions = {
                 method: 'GET',
-                url: this.nodeUrl+"mine/"+this.address,
-                body: {
-                    index: 'value',
-                    transactionsIncluded: 'value',
-                    expectedReward: 'value',
-                    difficulty: 'value',
-                    blockDataHash: 'value'
-                },
+                url: nodeUrl+"mine/"+minerAddress,
+                // body: {
+                //     index: 'value',
+                //     transactionsIncluded: 'value',
+                //     expectedReward: 'value',
+                //     difficulty: 'value',
+                //     blockDataHash: 'value'
+                // },
                 json: true
-            }
+            };
            /* console.log('-- Request Options (GET BLOCK) --');
             console.log(requestOptions);
             console.log('---------------------');*/
-            get.concat(requestOptions, function (err, res, data) {
-                if (err) return err
+            Request(requestOptions, function(err, res, data) {
+
+                console.log("~~~~ request: " + JSON.stringify(res));
+
+                console.log("~~~~ request data: " + JSON.stringify(data));
+            // get.concat(requestOptions, function (err, res, data) {
+                if (err) {
+                    console.error("~~~~~ err:" + err);
+                    return err
+                }
 
                 if(res.statusCode == 200){
 
@@ -75,11 +85,13 @@ class Miner {
                 }
 
 
-            })
+            });
             console.log('--------------------------------------');
-            break;
+            // break;
+
         }
-    }
+
+    // }
 
 }
 
@@ -96,10 +108,13 @@ function submitBlock(blockData, nonce, hash, date,nodeUrl,minerAddress) {
             minerAddress: minerAddress
         },
         json: true
-    }
-
-    get.concat(requestOptions, function (err, res, data) {
-        if (err) return err
+    };
+    Request(requestOptions, function(err, res, data) {
+    // get.concat(requestOptions, function (err, res, data) {
+        if (err) {
+            console.error("??????? err: " + err);
+            return err;
+        }
         console.log(res.statusCode + "BLOCK SUBMITED SUCCESSFULLY ") // `data` is an object
     })
 }
