@@ -1,5 +1,6 @@
 const env = process.env.NODE_ENV || 'development';
 const Miner = require('./modules/Miner');
+const InfiniteLoop = require('infinite-loop');
 
 
 //TODO all miner properties between the comments to be included in a json config file
@@ -19,7 +20,11 @@ if(!nodeUrl){
 
 let miner = new Miner(about, minerName,minerAddress,nodeUrl);
 
-miner.mine(miner.nodeUrl,miner.address);
+var infiniteLoop = new InfiniteLoop();
+infiniteLoop.add(miner.mine, nodeUrl, minerAddress);
+infiniteLoop.run(); // for your life
+
+// miner.mine(miner.nodeUrl,miner.address);
 
 //TODO add miner object and miner.mine
 
