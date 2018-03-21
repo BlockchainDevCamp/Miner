@@ -1,15 +1,26 @@
 const env = process.env.NODE_ENV || 'development';
 const Miner = require('./modules/Miner');
 const InfiniteLoop = require('infinite-loop');
+const Crypto = require('./modules/Crypto');
 
 
 //TODO all miner properties between the comments to be included in a json config file
 
+function generateMinerAddress() {
+    let privateKeyStr = Crypto.createPrivateKey();
+    let publicKey = Crypto.derivePublicKey(privateKeyStr);
+    let compressedPublicKey = Crypto.compressPublicKey(publicKey);
+    let address = Crypto.createAddress(compressedPublicKey);
+    return address;
+}
 
 /**/
 let about = "NodeJs miner";
 let minerName = "Simeon";
-let minerAddress = "2da8959012043f9d9c6591af22a3d30af986bc2f";
+
+
+
+let minerAddress = generateMinerAddress();
 let nodeUrl = process.env.NODE_URL;
 
 if(!nodeUrl){
