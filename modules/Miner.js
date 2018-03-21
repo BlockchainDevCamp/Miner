@@ -22,7 +22,7 @@ class Miner {
             let nonce;
             const requestOptions = {
                 method: 'GET',
-                url: this.nodeUrl+"mine/"+this.address,
+                url: nodeUrl+"mine/"+minerAddress,
                 // body: {
                 //     index: 'value',
                 //     transactionsIncluded: 'value',
@@ -37,9 +37,14 @@ class Miner {
             console.log('---------------------');*/
             Request(requestOptions, function(err, res, data) {
 
+                console.log("~~~~ request: " + JSON.stringify(res));
+
                 console.log("~~~~ request data: " + JSON.stringify(data));
             // get.concat(requestOptions, function (err, res, data) {
-                if (err) return err
+                if (err) {
+                    console.error("~~~~~ err:" + err);
+                    return err
+                }
 
                 if(res.statusCode == 200){
 
@@ -103,10 +108,13 @@ function submitBlock(blockData, nonce, hash, date,nodeUrl,minerAddress) {
             minerAddress: minerAddress
         },
         json: true
-    }
-
-    get.concat(requestOptions, function (err, res, data) {
-        if (err) return err
+    };
+    Request(requestOptions, function(err, res, data) {
+    // get.concat(requestOptions, function (err, res, data) {
+        if (err) {
+            console.error("??????? err: " + err);
+            return err;
+        }
         console.log(res.statusCode + "BLOCK SUBMITED SUCCESSFULLY ") // `data` is an object
     })
 }
