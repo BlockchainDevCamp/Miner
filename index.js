@@ -9,7 +9,12 @@ const Miner = require('./modules/Miner');
 let about = "NodeJs miner";
 let minerName = "Simeon";
 let minerAddress = "2da8959012043f9d9c6591af22a3d30af986bc2f";
-let nodeUrl = "http://127.0.0.1:1111/"
+let nodeUrl = process.env.NODE_URL;
+
+if(!nodeUrl){
+	console.error("Please Define Node URL as a parameter. (e.g NODE_URL=<nodeurl> npm start)");
+	return;
+}
 /**/
 
 let miner = new Miner(about, minerName,minerAddress,nodeUrl);
